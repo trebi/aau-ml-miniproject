@@ -17,6 +17,7 @@ def load_data(filename):
     return data
 
 
+# transform feet and inches to cm
 def ft_and_inch_to_cm(ft_and_inch):
     if isinstance(ft_and_inch, str):
         ft = re.search('([0-9])+ft', ft_and_inch)
@@ -35,6 +36,49 @@ def print_df_to_html(df, filename):
     print("DataFrame printed to file '" + filename + "'")
 
 
+# cup size: a, b, c, d, dd, ddd, ... -> 1, 2, 3, 4, 5, 6, ...
+def cup_size_to_ordinal(cup_size):
+    if str(cup_size).replace('.', '', 1).isdigit():
+        return cup_size
+
+    cup_size = str(cup_size)
+    slash_pos = cup_size.find("/")
+    if slash_pos != -1:
+        cup_size = cup_size[:slash_pos]
+
+    if cup_size[0] == "a":
+        return 1
+    if cup_size[0] == "b":
+        return 2
+    if cup_size[0] == "c":
+        return 3
+    if cup_size[0] == "d":
+        return 4 + (len(cup_size) - 1)
+    return None
+
+
+# length: slightly short, just right, slightly long -> -1, 0, 1
+def length_to_ordinal(length):
+    if length == "slightly short":
+        return -1
+    if length == "just right":
+        return 0
+    if length == "slightly long":
+        return 1
+    return None
+
+
+# shoe width: narrow, average, wide -> -1, 0, 1
+def shoe_width_to_ordinal(shoe_width):
+    if shoe_width == "narrow":
+        return -1
+    if shoe_width == "average":
+        return 0
+    if shoe_width == "wide":
+        return 1
+    return None
+
+
 def main():
     datafiles = {
        "data/modcloth_product_1.json": "output/product_1.html",
@@ -42,14 +86,21 @@ def main():
        "data/modcloth_product_3.json": "output/product_3.html",
     }
 
-    # Product 1
     for in_file, out_file in datafiles.items():
         data = load_data(in_file)
         df = pd.DataFrame(data)
 
-        # transform feet and inches to cm
         if 'height' in df:
             df['height'] = df['height'].apply(lambda x: ft_and_inch_to_cm(x))
+
+        if 'cup size' in df:
+            df['cup size'] = df['cup size'].apply(lambda x: cup_size_to_ordinal(x))
+
+        if 'length' in df:
+            df['length'] = df['length'].apply(lambda x: length_to_ordinal(x))
+
+        if 'shoe width' in df:
+            df['shoe width'] = df['shoe width'].apply(lambda x: shoe_width_to_ordinal(x))
 
         print_df_to_html(df, out_file)
 
