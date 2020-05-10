@@ -59,8 +59,8 @@ def shoe_width_to_ordinal(shoe_width):
 def fit_to_ordinal(fit):
     if fit == "small":
         return -1
-    if fit == "average":
+    if fit == "average" or fit == "fit":
         return 0
-    if fit == "wide":
+    if fit == "wide" or fit == "large":
         return 1
     return None

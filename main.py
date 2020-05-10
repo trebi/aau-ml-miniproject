@@ -114,7 +114,9 @@ def linear_regression(df):
 
         # compare y and y_pred (model: y_pred = Ax + b)
         predictions = y_pred.eval(feed_dict={x: X_data})
-        print(y_data, predictions)
+        X_fit = df.filter(["fit"]).to_numpy().transpose()
+        print(y_data, predictions, X_fit)
+        print("evaluation - the number represents of how many sizes should the prediction differ ", y_data - np.round(predictions) - X_fit)
 
 
 if __name__ == '__main__':
