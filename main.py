@@ -36,16 +36,16 @@ def main():
         df = pd.DataFrame(data)
 
         if 'height' in df:
-            df['height'] = df['height'].apply(lambda x: ft_and_inch_to_cm(x))
+            df['height'] = df['height'].apply(ft_and_inch_to_cm)
 
         if 'cup size' in df:
-            df['cup size'] = df['cup size'].apply(lambda x: cup_size_to_ordinal(x))
+            df['cup size'] = df['cup size'].apply(cup_size_to_ordinal)
 
         if 'length' in df:
-            df['length'] = df['length'].apply(lambda x: length_to_ordinal(x))
+            df['length'] = df['length'].apply(length_to_ordinal)
 
         if 'shoe width' in df:
-            df['shoe width'] = df['shoe width'].apply(lambda x: shoe_width_to_ordinal(x))
+            df['shoe width'] = df['shoe width'].apply(shoe_width_to_ordinal)
 
         print_df_to_html(df, out_file)
 
